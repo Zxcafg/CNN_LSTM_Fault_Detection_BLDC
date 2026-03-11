@@ -10,6 +10,70 @@ Pomiary zostały zebrane dla różnych prędkości obrotowych (5k, 6k, 7k, 9k, 1
 ## Autor
 - **Pavel Tshonek**
 
+## Wymagania i narzędzia
+
+### Środowisko programistyczne
+Projekt został zrealizowany z wykorzystaniem następujących narzędzi:
+
+- **Python 3.12** - główny język programowania dla modeli ML
+- **MATLAB** - wykorzystany do wstępnej analizy danych i przycinania plików pomiarowych
+- **Miniforge (Anaconda)** - menedżer środowisk conda, lekka alternatywa dla pełnej Anacondy
+- **Linux (Ubuntu)** - system operacyjny uruchomiony za pomocą WSL
+
+### Instalacja Miniforge
+Do instalacji Miniforge został użyty system operacyjny Linux Ubuntu.
+Pobranie środowiska zostało wykonane przy użyciu tej komendy:
+```bash
+wget https://github.com/conda-forge/miniforge/releases/download/26.1.0-0/Miniforge3-26.1.0-0-Linux-x86_64.sh
+```
+Sama instalacja za pomocą tej komendy:
+```bash
+bash Miniforge3-26.1.0-0-Linux-x86_64.sh
+```
+**UWAGA**: podczas instalacji Conda należy zgodzić się na jej inicjalizację!
+Po ponownym uruchomieniu terminalu przed nazwą użytkownika powinien pojawić się napis $(base)$ , co oznacza, że środowisko Miniforge zostało zainstalowane i zainicjalizowane poprawnie.
+
+### Instalacja TensorFlow z obsługą GPU
+Do trenowania modeli wykorzystano TensorFlow z obsługą karty graficznej (GPU), co znacząco przyspieszyło proces uczenia. Instalacja została wykonana według następującej procedury w terminalu WSL/Linux:
+
+```bash
+# Utworzenie nowego środowiska conda z Python 3.12
+conda create -n tf_gpu python=3.12
+
+# Aktywacja środowiska
+conda activate tf_gpu
+
+# Instalacja TensorFlow z obsługą GPU
+conda install tensorflow[gpu]
+```
+
+Takie podejście automatycznie instaluje wszystkie niezbędne zależności, w tym:
+- **CUDA Toolkit** - biblioteki do obliczeń równoległych na GPU
+- **cuDNN** - biblioteka głębokiego uczenia zoptymalizowana dla GPU NVIDIA
+
+Po instalacji można zweryfikować dostępność GPU:
+
+```python
+import tensorflow as tf
+print(tf.config.list_physical_devices("GPU"))
+```
+
+Przykład poprawnego wykrycia urządzenia GPU:
+```python
+[PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+```
+Oznacza to, że TensorFlow będzie wykorzystywać kartę graficzną do przyspieszenia obliczeń.
+
+### Wymagane biblioteki Python
+```text
+tensorflow[gpu]>=2.13.0
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+joblib>=1.3.0
+```
+
 ## Architektura modelu
 Model zbudowany jest w oparciu o framework TensorFlow/Keras i składa się z następujących warstw:
 
